@@ -4,12 +4,13 @@ HOST: https://api.homecredit.cz
 # Home Credit - Partner API
 API documentation for Home Credit API for partners.
 
-> Version of documentation: `3.2.1` (02/2024)
+> Version of documentation: `3.3.1` (04/2024)
 
 In case of any question, please contact our integration department  (integrace_eshop@homecredit.cz).
 
 | Version        | Release | Release date | News |
 | ---            | ---     | ---          | ---  |
+| 3.2.1 (04/2024) | CS115    | 13.2.2024  | One new resource was published: [API health check](#reference/financing/v1/health{?timeout})
 | 3.2.1 (02/2024) | CS113    | 13.2.2024  | Two new resources were published: [Cancel Application](#reference/application-resources/cancel-application) and [Get Application Detail](/#reference/application-resources/get-application-detail) |
 | 3.1.1 (01/2024) | CS112    | 17.1.2024  | New version of API |
 
@@ -484,6 +485,61 @@ Partner use `/financing/v3/applications/{applicationId}/orders/deliver` resource
         Status change can not be processed
 
     + Attributes (Errors)
+    
+# Group Health check
+To easily find out current API state use the [API state check resource](#reference/api-status-check/api-status-check).
+To check the availability of back-end services use the [health check resource](#reference/health-check/health-check).
+
+## API status check [/info]
+If the API is up and running, you receive HTTP status code 204 and object of information about it.
+
+In other cases, you receive one of the following errors:
+| Status code | Code                  |
+| ---         | ---                   |
+| 406         | NOT_ACCEPTABLE        |
+| 500         | INTERNAL_SERVER_ERROR |
+
+> Note: resource DOES NOT require valid *access_token* in the HTTP header of the request
+
+### API status check [GET]
+Get current state of the API
+
++ Response 200(application/json;charset=UTF-8)
+
+        API is up and running
+
+    + Attributes (ApiInfo)
+
+
++ Response 500(application/json;charset=UTF-8)
+        Error in processing request
+
+    + Attributes (Errors)
+
+
+## API health check [/financing/v1/health{?timeout}]
+If the API back-end services is up and running, you receive HTTP status code 204.
+
+In other cases, you receive one of the following errors:
+| Status code | Code                  |
+| ---         | ---                   |
+| 500         | SERVICE_FAILED        |
+| 504         | SERVICE_TIMEOUT       |
+
+> Note: resource DOES require valid *access_token* in the HTTP header of the request
+
++ Parameters
+    + timeout: `2000` (string, optional) - Optional timeout (in miliseconds) for completition of the request (504 is returned when not fulfilled). If empty, considered 2000.
+
+### API health check [GET]
+Get current state of the API
+
++ Response 204
+
++ Response 500(application/json;charset=UTF-8)
+        Error in processing request
+
+    + Attributes (Errors)
 
 
 # Group Merchantsite resources
@@ -823,6 +879,9 @@ Notify partner about changes in application.
 
 ## VatAmount (object)
 Financial amount with VAT rate.
+
+## ApiInfo (object)
+API information
 
 ### Properties
 + `value`: 14950 (number, required) - Amount in minor units (14950 represents 149,50) [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217). MUST be 0 or greater.
