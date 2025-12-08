@@ -208,6 +208,8 @@ This migration guide focuses on changes in the [Application resources](#referenc
 - **v1:** `/financing/v1/applications`
 - **v3:** `/financing/v3/applications`
 
+**Authentication:** Both API versions use the same authentication endpoint `/authentication/v1/partner` to obtain a security token (see section [Login partner](#reference/security/login-partner)).
+
 #### 1.2 New endpoints in v3
 - `GET /financing/v3/applications/{applicationId}` - retrieve application detail
 - `PUT /financing/v3/applications/{applicationId}/cancel` - cancel application
